@@ -1,41 +1,61 @@
 import java.awt.*;
-//test push
-public class CafeWall {
-    //Do not remove the static variable MORTAR
-    //You can change the value to either 1 or 2 (Your code should work for both cases)
-    // do NOT remove this line OR change the variable name - you CAN change the value
-    public static Integer MORTAR = 2;
 
-    public static void main(String[] args) {
-        // Pixels and parameter of drawing being 650 by 420
-        DrawingPanel panel = new DrawingPanel(650,420);
-        // Color of background being Gray
+public class CafeWall {
+    //define the gap between rows
+    public static final int MORTAR = 2;
+
+    public static void main(String[] args){
+        // set the panel and background
+        DrawingPanel panel = new DrawingPanel(650, 420);
         panel.setBackground(Color.GRAY);
         Graphics g = panel.getGraphics();
-        // This is the paramters of the drawing panel of CafeWall is the dimensions and background given below
-        drawRow(3, 25, 0, 0, g);
-        drawRow(4, 35, 40, 80, g);
-        drawGrid(0, 5, 20, 20, 140, g);
-        drawGrid(15, 3, 25, 250, 180, g);
-        drawGrid(15, 5, 20, 425, 200, g);
-        drawGrid(30, 2, 30, 450, 20, g);
+
+        //draw upper left row
+        drawRow(0, 0, 3, 25, g);
+        //draw middle left row
+        drawRow(40,80,4,35,g);
+
+        //draw lower left grid
+        drawGrid(20,140,5,20,g,0);
+
+        //draw upper right grid
+        drawGrid(450,20,2,30,g,30);
+
+        //draw lower middle grid
+        drawGrid(250,180,3,25,g,15);
+
+        //draw lower right grid
+        drawGrid(425,200,5,20,g,15);
     }
-    // This gives us the row and covers of the rows in order to make it have multiple stacks of pixel backgrounds on the Cafe Wall
-    public static void drawRow(int number, int size, int x, int y, Graphics g) {
-        for (int boxes = 0; boxes < number; boxes ++) {
+
+    //method to draw one row
+    public static void drawRow(int x, int y, int numPairs, int size, Graphics g){
+        //draw a row
+        for(int i = 1; i <= numPairs; i++){
+            //draw one black box
             g.setColor(Color.BLACK);
-            g.fillRect(x + 2 * boxes * size, y, size, size);
-            g.setColor(Color.WHITE);
-            g.fillRect(x + 2 * boxes * size + size, y, size, size);
+            g.fillRect(x+(i-1)*2*size, y, size, size);
+
+            //draw blue X in black box
             g.setColor(Color.BLUE);
-            g.drawLine(x + 2 * boxes * size, y, x + 2 * boxes * size + size, y + size);
-            g.drawLine(x + 2 * boxes * size, y + size, x + 2 * boxes * size + size, y);
+            g.drawLine(x+(i-1)*2*size, y, x+(i-1)*2*size+size, y+size);
+            g.drawLine(x+(i-1)*2*size, y+size, x+(i-1)*2*size+size, y);
+
+            //draw one white box
+            g.setColor(Color.WHITE);
+            g.fillRect(x+(i-1)*2*size+size, y, size, size);
         }
+
     }
-    //This draws out the overall grid that we will be using to draw the Cafe Wall on, giving the background and surface to put our painting on
-    public static void drawGrid(int offset, int number, int size, int x, int y, Graphics g) {
-        for (int i = 0; i < number * 2; i++) {
-            drawRow(number, size, x + offset / 2 - (offset * (int) Math.pow(-1.0, i)) / 2, y + i * (size + MORTAR), g);
+
+    //method to draw one grid
+    public static void drawGrid(int x, int y, int numPairs, int size, Graphics g, int offset){
+        //draw a grid
+        for(int j = 1; j <= numPairs; j++){
+            //draw the first row
+            drawRow(x,y+(j-1)*2*size+4*(j-1),numPairs,size,g);
+            //draw the second row
+            drawRow(x+offset,y+(j-1)*2*size+4*(j-1)+size+MORTAR,numPairs,size,g);
         }
     }
 
